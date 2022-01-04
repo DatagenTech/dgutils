@@ -12,5 +12,5 @@ Please provide any feedback you see fit, and let us know if something is broken.
 <br><br>
 Datagen CS team
 
-![alt text](imgs/readme_illustration.png)
-![alt text](imgs/readme_illustration2.png)
+![alt text](Images/readme_illustration.png)
+![alt text](Images/readme_illustration2.png)
