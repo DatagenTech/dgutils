@@ -275,9 +275,9 @@ b {
 				let pitch = parseFloat(head_rotations[1][0].value) * Math.PI / 180;
 				let yaw = parseFloat(head_rotations[2][0].value) * Math.PI / 180;
 				pitch = pitch;
-				yaw = yaw * -1;
+				yaw = yaw;
 				roll = roll * -1;
-				head_object.rotation.set(pitch, yaw, roll, "XYZ");
+				head_object.rotation.set(pitch, roll, yaw, "XYZ");
 				render();
 			}
 			head_rotations.forEach((rotation) => {
