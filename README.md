@@ -7,6 +7,7 @@ The notebook is based on the DataLoader submodule. The proper way to clone the r
 ```
 git clone --recurse-submodules https://github.com/DatagenTech/dgutils.git
 ```
+The recommended Python version is 3.9
 
 Please provide any feedback you see fit, and let us know if something is broken.
 <br><br>
