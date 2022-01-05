@@ -1,3 +1,4 @@
+python~=3.9.7
 matplotlib~=3.4.3
 numpy~=1.22
 scipy~=1.7.2
