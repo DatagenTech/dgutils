@@ -5,9 +5,11 @@ Moreover, the notebooks give some guidance over common dataset manipulations.
 <br><br>
 
 ## Installation steps
-The notebook is based on the DataLoader submodule. The proper way to clone the repository is:
+The notebook is based on the DataLoader submodule. <br>
+Begin by cloning it:
+
 ```
-git clone --recurse-submodules https://github.com/DatagenTech/dgutils.git
+git clone https://github.com/DatagenTech/dgutils.git
 ```
 
 Create a new Conda environment with Python 3.9:
