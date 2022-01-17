@@ -1,6 +1,7 @@
 apex_of_cornea_point : {key_2d : {camera : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } }{key_3d : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } 
 aspect_px : np.ndarray (1 dimensional) 
 background : <class 'str'> 
+camera_name : <class 'str'> 
 camera_type : <class 'str'> 
 center_of_iris_point : {key_2d : {camera : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } }{key_3d : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } 
 center_of_pupil_point : {key_2d : {camera : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } }{key_3d : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } 

@@ -27,6 +27,7 @@ class Datapoint:
     eye_gaze: Structure
 
     # Camera metadata
+    camera_name: str
     camera_type: str
     location: ndarray
     orientation: Structure

@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 from Datapoint import Datapoint
 from structure import structure
+import difflib
 
 
 class DatapointHandler:
@@ -54,8 +55,16 @@ class DatapointHandler:
 
         # Integrity checking
         if self._check_integrity:
-            if self._dp.repr_aux(struct_only=True) != self.dp_struct:
-                raise ValueError("The datapoint does not follow the standard format. Please check its integrity")
+            current_rep = self._dp.repr_aux(struct_only=True)
+            baseline_repr = self.dp_struct
+            if current_rep != baseline_repr:
+                diff = ''
+                for text in difflib.unified_diff(current_rep.split("\n"), baseline_repr.split("\n")):
+                    if text[:3] not in ('+++', '---', '@@ '):
+                        diff += text + '\n'
+                raise ValueError(f"The datapoint does not follow the standard format. Please check its integrity\n"
+                                 f"Diff output:\n"
+                                 f"{diff}")
 
         self._loaded = True
 

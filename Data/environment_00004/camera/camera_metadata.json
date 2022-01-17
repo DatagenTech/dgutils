@@ -1,4 +1,5 @@
 {
+   "camera_name": "camera",
    "camera_type": "PERSP",
    "location": {
       "x": 0.0,
