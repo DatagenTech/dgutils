@@ -15,7 +15,9 @@ dp = ds[0]
 A modality can be accessed using:
 ```
 rgb_img = dp.rgb_img
-right_eye = dp.apex_of_cornea_point.key_3d.right_eye
+right_eye = dp.apex_of_cornea_point.key_2d.camera.right_eye
+
+Out[1]: array([402, 488])
 ```
 
 ![alt text](imgs/JSON_format.png)
