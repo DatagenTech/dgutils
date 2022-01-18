@@ -73,7 +73,7 @@ class Datapoint:
     def repr_aux(self, struct_only : bool):
         """
         Gives a representation of the data point
-        :param struct_only: Print only the structure of tht Datapoint. Useful for integrity check
+        :param struct_only: Print only the structure of the Datapoint. Useful for integrity check
         :return: A printable string
         """
         def repr_dict(obj, depth):

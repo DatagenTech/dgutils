@@ -57,7 +57,7 @@ class DatapointHandler:
         if self._check_integrity:
             current_rep = self._dp.repr_aux(struct_only=True)
             baseline_repr = self.dp_struct
-            if current_rep != baseline_repr:
+            if current_rep.replace(" ", "") != baseline_repr.replace(" ", ""):
                 diff = ''
                 for text in difflib.unified_diff(current_rep.split("\n"), baseline_repr.split("\n")):
                     if text[:3] not in ('+++', '---', '@@ '):
