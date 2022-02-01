@@ -5,6 +5,7 @@ from os.path import join, dirname
 import cv2
 import numpy as np
 from Datapoint import Datapoint
+from ImageHandler import ImageHandler
 from structure import structure
 import difflib
 
@@ -125,20 +126,22 @@ class DatapointHandler:
         :return: The loaded data
         """
 
-        img_dict = {'depth_img' : 'depth.exr', 'ir_img' : 'infrared_spectrum.png', 'rgb_img': 'visible_spectrum.png',
-                    'normals_map': 'normal_maps.exr', 'semantic_seg_map':'semantic_segmentation.exr'}
+        img_dict = {'depth_img' : 'depth.exr', 'ir_img' : 'infrared_spectrum.png', 'rgb_img':
+                    'visible_spectrum.png', 'normals_map': 'normal_maps.exr',
+                    'semantic_seg_map':'semantic_segmentation.exr'}
         for k, v in img_dict.items():
             img_dict[k] = join(self._path, 'camera', v)
 
         exr_open = lambda img_path : cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
         bgr2rgb = lambda img : cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img_dict['depth_img'] = exr_open(img_dict['depth_img']).mean(axis=-1)
-        img_dict['ir_img'] = bgr2rgb(cv2.imread(img_dict['ir_img']))
-        img_dict['rgb_img'] = bgr2rgb(cv2.imread(img_dict['rgb_img']))
-        img_dict['normals_map'] = bgr2rgb(exr_open(img_dict['normals_map']))
-        img_dict['semantic_seg_map'] = bgr2rgb(exr_open(img_dict['semantic_seg_map']))
+        reduce_channels = lambda img : img.mean(axis=-1)
+        img_dict['depth_img'] = ImageHandler(img_dict['depth_img'], [exr_open, reduce_channels])
+        img_dict['ir_img'] = ImageHandler(img_dict['ir_img'], [cv2.imread, bgr2rgb])
+        img_dict['rgb_img'] = ImageHandler(img_dict['rgb_img'], [cv2.imread, bgr2rgb])
+        img_dict['normals_map'] = ImageHandler(img_dict['normals_map'], [exr_open, bgr2rgb])
+        img_dict['semantic_seg_map'] = ImageHandler(img_dict['semantic_seg_map'], [exr_open, bgr2rgb])
 
-        return img_dict
+        return {'image_handlers' : img_dict}
 
     @classmethod
     def __nested_coords_to_numpy(cls, obj):

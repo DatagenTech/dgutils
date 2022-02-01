@@ -1,7 +1,6 @@
 import numpy as np
 from numpy import ndarray
 from dataclasses import dataclass
-# TODO is it right to import it like that?
 from collections import namedtuple as Structure
 
 # Generated using
@@ -9,7 +8,6 @@ from collections import namedtuple as Structure
 # print('{} : {}'.format(key, type(value).__name__))
 # In DataPointHandler load function
 
-#TODO: Split into Textual and Image Modalities. Lazy loading of files
 @dataclass(frozen=True)
 class Datapoint:
     # Actor metadata
@@ -59,12 +57,31 @@ class Datapoint:
     environment: str
     background: str
 
-    # Image modalities
-    depth_img: ndarray
-    ir_img: ndarray
-    rgb_img: ndarray
-    normals_map: ndarray
-    semantic_seg_map: ndarray
+    # Image modalities handlers. This is a private field.
+    # Use the property fields below to access image modalities
+    image_handlers: Structure
+
+    # Image modalities getters. Uses lazy loading.
+    @property
+    def depth_img(self):
+        return self.image_handlers.depth_img.img
+
+    @property
+    def ir_img(self):
+        return self.image_handlers.ir_img.img
+
+    @property
+    def rgb_img(self):
+        return self.image_handlers.rgb_img.img
+
+    @property
+    def normals_map(self):
+        return self.image_handlers.normals_map.img
+
+    @property
+    def semantic_seg_map(self):
+        return self.image_handlers.semantic_seg_map.img
+
 
 
     def __repr__(self) -> str:

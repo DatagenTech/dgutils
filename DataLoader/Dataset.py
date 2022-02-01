@@ -3,7 +3,7 @@ from os.path import join
 from DatapointHandler import DatapointHandler
 from Datapoint import Datapoint
 
-# Todo: Add documentation, make DataPoint more readable, rename to Dataset (without cap letters)
+
 class Dataset:
     """
     Class for dataset parsing and loading into Python
@@ -14,7 +14,7 @@ class Dataset:
         """
         all_dirs = sorted(next(os.walk(path))[1])
         data_dirs = [dir for dir in all_dirs if DatapointHandler.check_structure(join(path, dir))]
-        self._data = [DatapointHandler(path=join(path, dir)) for dir in data_dirs]
+        self._data = [DatapointHandler(path=join(path, dir), check_integrity=True) for dir in data_dirs]
 
     def __getitem__(self, item) -> Datapoint:
         """

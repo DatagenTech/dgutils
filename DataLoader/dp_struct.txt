@@ -9,7 +9,6 @@ center_of_rotation_point : {key_2d : {camera : {left_eye : np.ndarray (1 dimensi
 dense_is_visible : np.ndarray (1 dimensional) 
 dense_keypoints_2d_coordinates : np.ndarray (2 dimensional) 
 dense_keypoints_3d_coordinates : np.ndarray (2 dimensional) 
-depth_img : np.ndarray (2 dimensional) 
 environment : <class 'str'> 
 extrinsic_matrix : np.ndarray (2 dimensional) 
 eye_gaze : {axis_directions : {left_eye : {axis_directions : {optical_axis_direction : np.ndarray (1 dimensional) }{visual_axis_direction : np.ndarray (1 dimensional) } } }{right_eye : {axis_directions : {optical_axis_direction : np.ndarray (1 dimensional) }{visual_axis_direction : np.ndarray (1 dimensional) } } } }{eye_gaze_direction_type : <class 'str'> }{target_point : {left_eye : np.ndarray (1 dimensional) }{right_eye : np.ndarray (1 dimensional) } } 
@@ -19,8 +18,8 @@ fov : {horizontal : <class 'float'> }{vertical : <class 'float'> }
 head_metadata : {head_root_location : np.ndarray (1 dimensional) }{head_rotation : np.ndarray (1 dimensional) }{head_six_dof : {location : np.ndarray (1 dimensional) }{look_at_vector : np.ndarray (1 dimensional) } } 
 identity_id : <class 'str'> 
 identity_label : {age : <class 'str'> }{ethnicity : <class 'str'> }{gender : <class 'str'> } 
+image_handlers : {depth_img : <class 'ImageHandler.ImageHandler'> }{ir_img : <class 'ImageHandler.ImageHandler'> }{normals_map : <class 'ImageHandler.ImageHandler'> }{rgb_img : <class 'ImageHandler.ImageHandler'> }{semantic_seg_map : <class 'ImageHandler.ImageHandler'> } 
 intrinsic_matrix : np.ndarray (2 dimensional) 
-ir_img : np.ndarray (3 dimensional) 
 iris_circle : {key_2d : {camera : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } }{key_3d : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } 
 is_visible : np.ndarray (1 dimensional) 
 keypoints_2d_coordinates : np.ndarray (2 dimensional) 
@@ -30,11 +29,8 @@ max_x : <class 'int'>
 max_y : <class 'int'> 
 min_x : <class 'int'> 
 min_y : <class 'int'> 
-normals_map : np.ndarray (3 dimensional) 
 orientation : {look_at_vector : np.ndarray (1 dimensional) }{up_vector : np.ndarray (1 dimensional) } 
 pupil_circle : {key_2d : {camera : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } }{key_3d : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } 
 resolution_px : np.ndarray (1 dimensional) 
-rgb_img : np.ndarray (3 dimensional) 
-semantic_seg_map : np.ndarray (3 dimensional) 
 sensor : {sensor_height : <class 'float'> }{sensor_width : <class 'float'> } 
 time_of_day : <class 'str'> 
