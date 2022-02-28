@@ -8,16 +8,17 @@ from Datapoint import Datapoint
 from ImageHandler import ImageHandler
 from structure import structure
 import difflib
+from glob import glob
 
 
 class DatapointHandler:
     DP_STRUCT_FILE = join(dirname(__file__), 'dp_struct.txt')
-    def __init__(self, path, check_integrity=True):
+    def __init__(self, render_path, check_integrity=True):
         """
-        :param path: The path for the data point folder
+        :param render_path: The path of the visible_spectrum file
         :param check_integrity: Check if the datapoint is structured identically as the template datapoint
         """
-        self._path = path
+        self._render_path = render_path
         self._loaded = False
         self._dp = None
         self._check_integrity = check_integrity
@@ -40,8 +41,8 @@ class DatapointHandler:
         if self._loaded:
             return
 
-        if not self.check_structure(self._path):
-            raise ValueError(f'The directory {self._path} does not follow the data point standard structure. Please check that no '
+        if not self.check_structure(self._render_path):
+            raise ValueError(f'The directory of {self._render_path} does not follow the data point standard structure. Please check that no '
                                'file or folder was removed or renamed.')
         members = self.__load_json_files()
         members.update(self.__load_imgs())
@@ -70,13 +71,16 @@ class DatapointHandler:
         self._loaded = True
 
     @classmethod
-    def check_structure(cls, path) -> bool:
+    def check_structure(cls, render_path) -> bool:
         """
         Checks that a path is structured as a data point
-        :param path: The datapoint path
+        :param render_path: The datapoint's visible_spectrum file path
         """
+        if not os.path.isfile(render_path):
+            return False
+        # Checks if all the visual/JSON files are present in the directory
         for fn in cls.__get_filelist():
-            if not os.path.exists(join(path, fn)):
+            if not os.path.isfile(join(dirname(render_path), fn)):
                 return False
         return True
 
@@ -85,14 +89,12 @@ class DatapointHandler:
         Loads all the data point JSON files
         :return: The loaded data
         """
-        def standardize_kpts(kpts_dict, first_idx):
-            return np.array([kpts_dict[str(i)] for i in range(first_idx, len(kpts_dict) + first_idx)])
 
         all_dict = {}
         for fn in self.__get_filelist():
             if not fn.endswith('.json'):
                 continue
-            with open(join(self._path, fn)) as json_file:
+            with open(join(dirname(self._render_path), fn)) as json_file:
                 local_dict = json.load(json_file)
                 if 'dense_keypoints' in fn:
                     keys = list(local_dict.keys())
@@ -116,7 +118,8 @@ class DatapointHandler:
             for key in ['keypoints_2d_coordinates', 'keypoints_3d_coordinates', 'is_visible']:
                 if dense:
                     key = 'dense_' + key
-                all_dict[key] = standardize_kpts(all_dict[key], first_idx=0 if dense else 1)
+                # Transforms the keypoint numbered list ("0": [], "1": []...) to a Numpy array
+                all_dict[key] = np.array(list(all_dict[key].values()))
 
         return all_dict
 
@@ -125,12 +128,12 @@ class DatapointHandler:
         Loads all the image files
         :return: The loaded data
         """
-
         img_dict = {'depth_img' : 'depth.exr', 'ir_img' : 'infrared_spectrum.png', 'rgb_img':
-                    'visible_spectrum.png', 'normals_map': 'normal_maps.exr',
+                    os.path.basename(self._render_path), 'normals_map': 'normal_maps.exr',
                     'semantic_seg_map':'semantic_segmentation.exr'}
+
         for k, v in img_dict.items():
-            img_dict[k] = join(self._path, 'camera', v)
+            img_dict[k] = join(dirname(self._render_path), v)
 
         exr_open = lambda img_path : cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
         bgr2rgb = lambda img : cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -188,11 +191,11 @@ class DatapointHandler:
         return obj_new
 
     @staticmethod
-    # All the files are given except semantic_segmentation_metadata.json
+    # All the files are given except semantic_segmentation_metadata.json and envrionment.json
+    # The files are defined in relation to the render_path
+    # visible_spectrum is not included as it is defined in self._render_path
     def __get_filelist():
-        filelist = ['actor_metadata.json']
-        filelist += [join('camera', fn) for fn in
-                     'camera_metadata.json dense_keypoints.json depth.exr environment.json face_bounding_box.json ' \
-                     'visible_spectrum.png infrared_spectrum.png normal_maps.exr semantic_segmentation.exr ' \
-                     'standard_keypoints.json'.split()]
+        filelist = '../actor_metadata.json camera_metadata.json dense_keypoints.json depth.exr face_bounding_box.json ' \
+                     'infrared_spectrum.png normal_maps.exr semantic_segmentation.exr ' \
+                     'standard_keypoints.json'.split()
         return filelist

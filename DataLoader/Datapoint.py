@@ -52,11 +52,6 @@ class Datapoint:
     max_x: int
     max_y: int
 
-    # Environment
-    time_of_day: str
-    environment: str
-    background: str
-
     # Image modalities handlers. This is a private field.
     # Use the property fields below to access image modalities
     image_handlers: Structure
@@ -83,7 +78,7 @@ class Datapoint:
         return self.image_handlers.semantic_seg_map.img
 
 
-
+    # TODO: Remove the struct_only comparison and create a real unit test
     def __repr__(self) -> str:
         return self.repr_aux(struct_only=False)
 
@@ -96,6 +91,9 @@ class Datapoint:
         def repr_dict(obj, depth):
             rep = ''
             with np.printoptions(threshold=0, precision=3, edgeitems=2):
+                # Variable number of cameras makes the structure variable
+                if 'camera_1' in obj and struct_only:
+                    obj = {'camera': obj['camera_1']}
                 for key, value in iter(sorted(obj.items())):
                     if self.__isinstance_namedtuple(value):
                         value = repr_dict(value._asdict(), depth + 1)
