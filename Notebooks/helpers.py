@@ -16,8 +16,6 @@ def world_to_img(pts_3d, intrinsic_matrix, extrinsic_matrix):
 	if len(pts_3d.shape) == 1:
 		pts_3d = pts_3d[np.newaxis]
 
-	intrinsic_matrix = intrinsic_matrix.copy()
-	intrinsic_matrix[1,1] = intrinsic_matrix[0,0]
 	pts_2d_homogeneous = world_to_cam(pts_3d, extrinsic_matrix) @ intrinsic_matrix.T
 	pts_2d = pts_2d_homogeneous[..., :2] / pts_2d_homogeneous[..., 2][..., np.newaxis]
 
@@ -35,8 +33,6 @@ def world_to_cam(pts_3d, extrinsic_matrix):
 		pts_3d = np.hstack([pts_3d, np.ones((pts_3d.shape[0], 1))])
 
 	extrinsic_matrix = extrinsic_matrix.copy()
-	# FIXME: Used to fix the extrinsic matrix bug. Remove that once fixed
-	extrinsic_matrix[:, 3] *= -1
 	
 	pts_camera = pts_3d @ extrinsic_matrix.T
 	return np.squeeze(pts_camera)

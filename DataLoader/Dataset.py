@@ -1,5 +1,6 @@
-import os
 from os.path import join
+from glob import glob
+
 from DatapointHandler import DatapointHandler
 from Datapoint import Datapoint
 
@@ -12,9 +13,9 @@ class Dataset:
         """
         :param path: The dataset root directory
         """
-        all_dirs = sorted(next(os.walk(path))[1])
-        data_dirs = [dir for dir in all_dirs if DatapointHandler.check_structure(join(path, dir))]
-        self._data = [DatapointHandler(path=join(path, dir), check_integrity=True) for dir in data_dirs]
+        render_paths = glob(join(path, 'environment_?????', 'camera*', 'visible_spectrum*.png'))
+        render_paths = filter(DatapointHandler.check_structure, render_paths)
+        self._data = [DatapointHandler(render_path=path, check_integrity=True) for path in render_paths]
 
     def __getitem__(self, item) -> Datapoint:
         """
