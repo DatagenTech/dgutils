@@ -52,6 +52,9 @@ class Datapoint:
     max_x: int
     max_y: int
 
+    # Semantic segmentation color map
+    semantic_seg_colormap: Structure
+
     # Image modalities handlers. This is a private field.
     # Use the property fields below to access image modalities
     image_handlers: Structure

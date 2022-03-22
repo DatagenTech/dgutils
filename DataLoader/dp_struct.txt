@@ -30,4 +30,5 @@ min_y : <class 'int'>
 orientation : {look_at_vector : np.ndarray (1 dimensional) }{up_vector : np.ndarray (1 dimensional) } 
 pupil_circle : {key_2d : {camera : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } }{key_3d : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } 
 resolution_px : np.ndarray (1 dimensional) 
+semantic_seg_colormap : {Mouth_geo : <class 'list'> }{Teeth_low_geo : <class 'list'> }{Teeth_up_geo : <class 'list'> }{eye_left : <class 'list'> }{eye_right : <class 'list'> }{eyebrows : <class 'list'> }{head : <class 'list'> }{left_ear : <class 'list'> }{lower_lip : <class 'list'> }{nose : <class 'list'> }{right_ear : <class 'list'> }{scalp : <class 'list'> }{tearduct_left : <class 'list'> }{tearduct_right : <class 'list'> }{upper_lip : <class 'list'> } 
 sensor : {sensor_height : <class 'float'> }{sensor_width : <class 'float'> } 

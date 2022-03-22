@@ -8,7 +8,6 @@ from Datapoint import Datapoint
 from ImageHandler import ImageHandler
 from structure import structure
 import difflib
-from glob import glob
 
 
 class DatapointHandler:
@@ -100,6 +99,8 @@ class DatapointHandler:
                     keys = list(local_dict.keys())
                     for key in keys:
                         local_dict['dense_' + key] = local_dict.pop(key)
+                if 'semantic_segmentation_metadata' in fn:
+                    local_dict = {'semantic_seg_colormap': local_dict}
                 # Converts lists to numpy arrays
                 for key in local_dict:
                     if isinstance(local_dict[key], list):
@@ -195,7 +196,7 @@ class DatapointHandler:
     # The files are defined in relation to the render_path
     # visible_spectrum is not included as it is defined in self._render_path
     def __get_filelist():
-        filelist = '../actor_metadata.json camera_metadata.json dense_keypoints.json depth.exr face_bounding_box.json ' \
-                     'infrared_spectrum.png normal_maps.exr semantic_segmentation.exr ' \
-                     'standard_keypoints.json'.split()
+        filelist = '../actor_metadata.json ../semantic_segmentation_metadata.json camera_metadata.json ' \
+                   'dense_keypoints.json depth.exr face_bounding_box.json infrared_spectrum.png normal_maps.exr ' \
+                   'semantic_segmentation.exr standard_keypoints.json'.split()
         return filelist
