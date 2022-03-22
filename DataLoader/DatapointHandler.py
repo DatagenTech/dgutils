@@ -83,6 +83,10 @@ class DatapointHandler:
                 return False
         return True
 
+    @staticmethod
+    def __standardize_seg_color(color):
+        return np.round(np.asarray(color).astype(np.float16), 2).astype(np.float32)
+
     def __load_json_files(self) -> dict:
         """
         Loads all the data point JSON files
@@ -100,7 +104,9 @@ class DatapointHandler:
                     for key in keys:
                         local_dict['dense_' + key] = local_dict.pop(key)
                 if 'semantic_segmentation_metadata' in fn:
+                    local_dict = {key: self.__standardize_seg_color(val) for key, val in local_dict.items()}
                     local_dict = {'semantic_seg_colormap': local_dict}
+
                 # Converts lists to numpy arrays
                 for key in local_dict:
                     if isinstance(local_dict[key], list):
@@ -138,12 +144,14 @@ class DatapointHandler:
 
         exr_open = lambda img_path : cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
         bgr2rgb = lambda img : cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+
         reduce_channels = lambda img : img.mean(axis=-1)
         img_dict['depth_img'] = ImageHandler(img_dict['depth_img'], [exr_open, reduce_channels])
         img_dict['ir_img'] = ImageHandler(img_dict['ir_img'], [cv2.imread, bgr2rgb])
         img_dict['rgb_img'] = ImageHandler(img_dict['rgb_img'], [cv2.imread, bgr2rgb])
         img_dict['normals_map'] = ImageHandler(img_dict['normals_map'], [exr_open, bgr2rgb])
-        img_dict['semantic_seg_map'] = ImageHandler(img_dict['semantic_seg_map'], [exr_open, bgr2rgb])
+        img_dict['semantic_seg_map'] = ImageHandler(img_dict['semantic_seg_map'], [exr_open, bgr2rgb, self.__standardize_seg_color])
 
         return {'image_handlers' : img_dict}
 
