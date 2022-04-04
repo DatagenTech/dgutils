@@ -135,8 +135,8 @@ class DatapointHandler:
         Loads all the image files
         :return: The loaded data
         """
-        img_dict = {'depth_img' : 'depth.exr', 'ir_img' : 'infrared_spectrum.png', 'rgb_img':
-                    os.path.basename(self._render_path), 'normals_map': 'normal_maps.exr',
+        img_dict = {'depth_img' : 'depth.exr', 'rgb_img': os.path.basename(self._render_path),
+                    'normals_map': 'normal_maps.exr',
                     'semantic_seg_map':'semantic_segmentation.exr'}
 
         for k, v in img_dict.items():
@@ -148,7 +148,6 @@ class DatapointHandler:
 
         reduce_channels = lambda img : img.mean(axis=-1)
         img_dict['depth_img'] = ImageHandler(img_dict['depth_img'], [exr_open, reduce_channels])
-        img_dict['ir_img'] = ImageHandler(img_dict['ir_img'], [cv2.imread, bgr2rgb])
         img_dict['rgb_img'] = ImageHandler(img_dict['rgb_img'], [cv2.imread, bgr2rgb])
         img_dict['normals_map'] = ImageHandler(img_dict['normals_map'], [exr_open, bgr2rgb])
         img_dict['semantic_seg_map'] = ImageHandler(img_dict['semantic_seg_map'], [exr_open, bgr2rgb, self.__standardize_seg_color])
@@ -205,6 +204,6 @@ class DatapointHandler:
     # visible_spectrum is not included as it is defined in self._render_path
     def __get_filelist():
         filelist = '../actor_metadata.json ../semantic_segmentation_metadata.json camera_metadata.json ' \
-                   'dense_keypoints.json depth.exr face_bounding_box.json infrared_spectrum.png normal_maps.exr ' \
+                   'dense_keypoints.json depth.exr face_bounding_box.json normal_maps.exr ' \
                    'semantic_segmentation.exr standard_keypoints.json'.split()
         return filelist

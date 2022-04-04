@@ -16,7 +16,7 @@ fov : {horizontal : <class 'float'> }{vertical : <class 'float'> }
 head_metadata : {head_root_location : np.ndarray (1 dimensional) }{head_rotation : np.ndarray (1 dimensional) }{head_six_dof : {location : np.ndarray (1 dimensional) }{look_at_vector : np.ndarray (1 dimensional) } } 
 identity_id : <class 'str'> 
 identity_label : {age : <class 'str'> }{ethnicity : <class 'str'> }{gender : <class 'str'> } 
-image_handlers : {depth_img : <class 'ImageHandler.ImageHandler'> }{ir_img : <class 'ImageHandler.ImageHandler'> }{normals_map : <class 'ImageHandler.ImageHandler'> }{rgb_img : <class 'ImageHandler.ImageHandler'> }{semantic_seg_map : <class 'ImageHandler.ImageHandler'> } 
+image_handlers : {depth_img : <class 'ImageHandler.ImageHandler'> }{normals_map : <class 'ImageHandler.ImageHandler'> }{rgb_img : <class 'ImageHandler.ImageHandler'> }{semantic_seg_map : <class 'ImageHandler.ImageHandler'> } 
 intrinsic_matrix : np.ndarray (2 dimensional) 
 iris_circle : {key_2d : {camera : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } }{key_3d : {left_eye : np.ndarray (2 dimensional) }{right_eye : np.ndarray (2 dimensional) } } 
 is_visible : np.ndarray (1 dimensional) 

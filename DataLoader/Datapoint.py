@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from collections import namedtuple as Structure
 
 # Generated using
-#for key, value in dp.__dict__.items():
+# for key, value in dp.__dict__.items():
 # print('{} : {}'.format(key, type(value).__name__))
 # In DataPointHandler load function
 
@@ -63,10 +63,6 @@ class Datapoint:
     @property
     def depth_img(self):
         return self.image_handlers.depth_img.img
-
-    @property
-    def ir_img(self):
-        return self.image_handlers.ir_img.img
 
     @property
     def rgb_img(self):

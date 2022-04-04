@@ -13,7 +13,11 @@ class Dataset:
         """
         :param path: The dataset root directory
         """
-        render_paths = glob(join(path, 'environment_?????', 'camera*', 'visible_spectrum*.png'))
+        camera_folder_path = join(path, 'environment_?????', 'camera*')
+        visible_spectrum_paths = glob(join(camera_folder_path, 'visible_spectrum*.png'))
+        ir_paths = glob(join(camera_folder_path, 'infrared_spectrum*.png'))
+        render_paths = visible_spectrum_paths + ir_paths
+        render_paths.sort()
         render_paths = filter(DatapointHandler.check_structure, render_paths)
         self._data = [DatapointHandler(render_path=path, check_integrity=True) for path in render_paths]
 
