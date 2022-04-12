@@ -83,10 +83,6 @@ class DatapointHandler:
                 return False
         return True
 
-    @staticmethod
-    def __standardize_seg_color(color):
-        return np.round(np.asarray(color).astype(np.float16), 2).astype(np.float32)
-
     def __load_json_files(self) -> dict:
         """
         Loads all the data point JSON files
@@ -104,7 +100,6 @@ class DatapointHandler:
                     for key in keys:
                         local_dict['dense_' + key] = local_dict.pop(key)
                 if 'semantic_segmentation_metadata' in fn:
-                    local_dict = {key: self.__standardize_seg_color(val) for key, val in local_dict.items()}
                     local_dict = {'semantic_seg_colormap': local_dict}
 
                 # Converts lists to numpy arrays
@@ -137,7 +132,7 @@ class DatapointHandler:
         """
         img_dict = {'depth_img' : 'depth.exr', 'rgb_img': os.path.basename(self._render_path),
                     'normals_map': 'normal_maps.exr',
-                    'semantic_seg_map':'semantic_segmentation.exr'}
+                    'semantic_seg_map':'semantic_segmentation.png'}
 
         for k, v in img_dict.items():
             img_dict[k] = join(dirname(self._render_path), v)
@@ -150,7 +145,7 @@ class DatapointHandler:
         img_dict['depth_img'] = ImageHandler(img_dict['depth_img'], [exr_open, reduce_channels])
         img_dict['rgb_img'] = ImageHandler(img_dict['rgb_img'], [cv2.imread, bgr2rgb])
         img_dict['normals_map'] = ImageHandler(img_dict['normals_map'], [exr_open, bgr2rgb])
-        img_dict['semantic_seg_map'] = ImageHandler(img_dict['semantic_seg_map'], [exr_open, bgr2rgb, self.__standardize_seg_color])
+        img_dict['semantic_seg_map'] = ImageHandler(img_dict['semantic_seg_map'], [exr_open, bgr2rgb])
 
         return {'image_handlers' : img_dict}
 
@@ -165,10 +160,12 @@ class DatapointHandler:
             if len(d) == 2:
                 return np.array([d['x'], d['y']])
             elif len(d) == 3:
-                if 'x' in d.keys():
+                if {'x', 'y', 'z'} == set(d.keys()):
                     return np.array([d['x'], d['y'], d['z']])
-                elif 'yaw' in d.keys():
+                elif {'yaw', 'pitch', 'roll'} == set(d.keys()):
                     return np.array([d['yaw'], d['pitch'], d['roll']])
+                elif {'R', 'G', 'B'} == set(d.keys()):
+                    return np.array([d['R'], d['G'], d['B']])
 
             # If we didn't return anything, the format is not correct
             raise ValueError("Invalid dictionary format")
@@ -177,10 +174,11 @@ class DatapointHandler:
             if not isinstance(d, dict):
                 return False
             numeric_values = all(isinstance(v, (int, float)) for v in d.values())
-            coords_2d = (len(d) == 2 and all(k in d for k in ('x', 'y')))
-            coords_3d = (len(d) == 3 and all(k in d for k in ('x', 'y', 'z')))
-            coords_rotation = (len(d) == 3 and all(k in d for k in ('yaw', 'pitch', 'roll')))
-            correct_keys = (coords_2d or coords_3d or coords_rotation)
+            coords_2d = {'x', 'y'} == set(d.keys())
+            coords_3d = {'x', 'y', 'z'} == set(d.keys())
+            coords_rotation = {'yaw', 'pitch', 'roll'} == set(d.keys())
+            coords_RGB = {'R', 'G', 'B'} == set(d.keys())
+            correct_keys = (coords_2d or coords_3d or coords_rotation or coords_RGB)
             return numeric_values and correct_keys
 
         obj_new = copy.deepcopy(obj)
@@ -205,5 +203,5 @@ class DatapointHandler:
     def __get_filelist():
         filelist = '../actor_metadata.json ../semantic_segmentation_metadata.json camera_metadata.json ' \
                    'dense_keypoints.json depth.exr face_bounding_box.json normal_maps.exr ' \
-                   'semantic_segmentation.exr standard_keypoints.json'.split()
+                   'semantic_segmentation.png standard_keypoints.json'.split()
         return filelist
