@@ -8,7 +8,6 @@ import numpy as np
 from Datapoint import Datapoint
 from ImageHandler import ImageHandler
 from structure import structure
-import difflib
 
 
 class DatapointHandler:
@@ -60,13 +59,16 @@ class DatapointHandler:
         if not os.path.isfile(render_path):
             return False
         # Checks if all the visual/JSON files are present in the directory
-        for fn in cls.__get_filelist(render_path):
+        for fn in cls.__get_filelist(render_path).values():
             if not os.path.isfile(join(dirname(render_path), fn)):
                 return False
         return True
 
     @staticmethod
     def __standardize_seg_color(color):
+        color = np.asarray(color)
+        if color.dtype == np.uint16:
+            return color
         return np.round(np.asarray(color).astype(np.float16), 2).astype(np.float32)
 
     def __load_json_files(self) -> dict:
@@ -76,16 +78,16 @@ class DatapointHandler:
         """
 
         all_dict = {}
-        for fn in self.__get_filelist(self._render_path):
+        for key, fn in self.__get_filelist(self._render_path).items():
             if not fn.endswith('.json'):
                 continue
             with open(join(dirname(self._render_path), fn)) as json_file:
                 local_dict = json.load(json_file)
-                if 'dense_keypoints' in fn:
+                if key == 'dense_keypoints':
                     keys = list(local_dict.keys())
                     for key in keys:
                         local_dict['dense_' + key] = local_dict.pop(key)
-                if 'semantic_segmentation_metadata' in fn:
+                if key == 'semantic_seg_metadata':
                     if 'human' not in local_dict:
                         #Old version of the segmentation map
                         local_dict = {key: self.__standardize_seg_color(val) for key, val in local_dict.items()}
@@ -119,9 +121,10 @@ class DatapointHandler:
         Loads all the image files
         :return: The loaded data
         """
-        img_dict = {'depth_img' : 'depth.exr', 'rgb_img': os.path.basename(self._render_path),
-                    'normals_map': 'normal_maps.exr',
-                    'semantic_seg_map':'semantic_segmentation.png'}
+        img_dict = self.__get_filelist(self._render_path)
+        # img_dict = {'depth_img' : 'depth.exr', 'rgb_img': os.path.basename(self._render_path),
+        #             'normals_map': 'normal_maps.exr',
+        #             'semantic_seg_map':'semantic_segmentation.png'}
 
         for k, v in img_dict.items():
             img_dict[k] = join(dirname(self._render_path), v)
@@ -190,8 +193,9 @@ class DatapointHandler:
     # The files are defined in relation to the render_path
     # visible_spectrum is not included as it is defined in self._render_path
     def __get_filelist(render_path):
-        filelist = '../actor_metadata.json ../semantic_segmentation_metadata.json camera_metadata.json ' \
-                   'dense_keypoints.json depth.exr face_bounding_box.json normal_maps.exr standard_keypoints.json'.split()
+        filelist = {'actor_metadata': '../actor_metadata.json', 'semantic_seg_metadata': '../semantic_segmentation_metadata.json',  'camera_metadata': 'camera_metadata.json',
+                    'dense_keypoints': 'dense_keypoints.json', 'depth_img': 'depth.exr',  'face_bounding_box' : 'face_bounding_box.json', 'normals_map' : 'normal_maps.exr',
+                    'standard_keypoints' : 'standard_keypoints.json', 'rgb_img': os.path.basename(render_path)}
 
         segmentation_map_path = glob(join(dirname(render_path), 'semantic_segmentation.???'))
         if not segmentation_map_path:
@@ -199,6 +203,6 @@ class DatapointHandler:
         if len(segmentation_map_path) > 1:
             raise RuntimeError('Multiple segmentation files')
 
-        filelist += [os.path.basename(segmentation_map_path[0])]
+        filelist['semantic_seg_map'] = os.path.basename(segmentation_map_path[0])
 
         return filelist
