@@ -19,7 +19,7 @@ class Dataset:
         render_paths = visible_spectrum_paths + ir_paths
         render_paths.sort()
         render_paths = filter(DatapointHandler.check_structure, render_paths)
-        self._data = [DatapointHandler(render_path=path, check_integrity=True) for path in render_paths]
+        self._data = [DatapointHandler(render_path=path) for path in render_paths]
 
     def __getitem__(self, item) -> Datapoint:
         """
