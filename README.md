@@ -20,8 +20,7 @@ conda activate dgutils
 
 Install the requirements:
 ```
-cd dgutils
-pip install -r requirements.txt
+pip install datagen
 ```
 
 
