@@ -2,7 +2,6 @@ from matplotlib import pyplot as plt
 import numpy as np
 from os.path import join
 import json
-import random
 import cv2
 
 # Show an image
@@ -148,10 +147,10 @@ def hic_visualize_pose(datapoint_path, skeleton=True):
 	else:
 		drawing_func = draw_keypoints
 
-	drawing_func(img, body, 5, cmap_idx=random.randint(0, nrof_colors))
-	drawing_func(img, upper_face, 2, cmap_idx=random.randint(0, nrof_colors))
-	drawing_func(img, mouth, 3, cmap_idx=random.randint(0, nrof_colors))
-	drawing_func(img, left_hand, 2, cmap_idx=random.randint(0, nrof_colors))
-	drawing_func(img, right_hand, 2, cmap_idx=random.randint(0, nrof_colors))
+	drawing_func(img, body, 5, cmap_idx=0)
+	drawing_func(img, upper_face, 2, cmap_idx=nrof_colors // 5)
+	drawing_func(img, mouth, 3, cmap_idx=2 * nrof_colors // 5)
+	drawing_func(img, left_hand, 2, cmap_idx=3 * nrof_colors // 5)
+	drawing_func(img, right_hand, 2, cmap_idx=4 * nrof_colors // 5)
 
 	return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
