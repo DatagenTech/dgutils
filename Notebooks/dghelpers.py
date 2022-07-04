@@ -10,6 +10,17 @@ def imshow(img):
 	plt.imshow(img)
 	plt.xticks([]); plt.yticks([])
 
+# Show a set of images in a grid
+def plot_grid(fig_shape, input_list, plot_func):
+    fig_size = 5 * np.array(fig_shape)
+    fig = plt.figure(figsize=fig_size)
+    grid = ImageGrid(fig, 111, nrows_ncols=fig_shape, axes_pad=0.)
+
+    for i, ax in enumerate(grid):
+        ax.get_xaxis().set_ticks([])
+        ax.get_yaxis().set_ticks([])
+        plot_func(ax, input_list[i])
+
 # Convert points from world coordinates (3D) to image coordinates (2D)
 def world_to_img(pts_3d, intrinsic_matrix, extrinsic_matrix):
 	assert intrinsic_matrix.shape == (3, 3)
