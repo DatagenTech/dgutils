@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+from matplotlib.patches import Patch
 import numpy as np
 from os.path import join
 import json
@@ -39,6 +40,22 @@ def world_to_cam(pts_3d, extrinsic_matrix):
 	
 	pts_camera = pts_3d @ extrinsic_matrix.T
 	return np.squeeze(pts_camera)
+
+
+def show_keypoints(img, keypoints, visible, title, convention='ij'):
+	# Convention can be either 'ij' (pixel coordinates) or 'xy' (cartesian coordinates)
+	color = np.where(visible[:, np.newaxis], [[0, 1, 0]], [[1, 0, 0]])
+	imshow(img)
+	if convention == 'ij':
+		plt.scatter(keypoints[:, 1], keypoints[:, 0], s=5, c=color)
+	elif convention == 'xy':
+		plt.scatter(keypoints[:, 0], keypoints[:, 1], s=5, c=color)
+
+	pop_invisible = Patch(color=[1, 0, 0], label='Invisible')
+	pop_visible = Patch(color=[0, 1, 0], label='Visible')
+
+	plt.legend(handles=[pop_visible, pop_invisible])
+	plt.title(title)
 
 
 ############################################## HIC functions ##############################################
@@ -135,6 +152,8 @@ def draw_keypoints(img, node, thickness, cmap_idx=0):
 	for child in node.children:
 		cmap_idx += 1
 		draw_keypoints(img, child, thickness, cmap_idx)
+
+
 
 def hic_visualize_pose(datapoint_path, skeleton=True):
 	RGB_IMG_PATH = join(datapoint_path, 'visible_spectrum.png')
