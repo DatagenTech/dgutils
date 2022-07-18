@@ -1,0 +1,8 @@
+{
+   "time_of_day": "day",
+   "domain": "home_security",
+   "behaviour": "walking_to_the_door_with_packaged_items",
+   "behaviour_permutation": "front_door_camera-0138c6f0-d57c-4f22",
+   "frame_number": 7,
+   "fps": 1
+}

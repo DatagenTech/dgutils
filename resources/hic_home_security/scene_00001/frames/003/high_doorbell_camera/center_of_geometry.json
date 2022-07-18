@@ -1,0 +1,572 @@
+{
+   "1_street_light_off.082": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 7.350539669394493,
+            "y": -4.1662522107358155,
+            "z": 1.6442946530155425
+         },
+         "pixel_2d": {
+            "x": 342,
+            "y": 258,
+            "depth": 7.342833995819092
+         }
+      }
+   },
+   "1_street_light_on.082": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 7.350539669394493,
+            "y": -4.166251733898657,
+            "z": 1.6442947759501223
+         },
+         "pixel_2d": {
+            "x": 342,
+            "y": 258,
+            "depth": 7.342833995819092
+         }
+      }
+   },
+   "2_side_light_off.101": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.181411266326904,
+            "y": -0.3175622547063379,
+            "z": 0.3843373552318283
+         },
+         "pixel_2d": {
+            "x": 271,
+            "y": 304,
+            "depth": 4.173705577850342
+         }
+      }
+   },
+   "2_side_light_off.102": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.278426885604858,
+            "y": 0.4893835460749121,
+            "z": 0.3841613389905163
+         },
+         "pixel_2d": {
+            "x": 239,
+            "y": 317,
+            "depth": 3.270721197128296
+         }
+      }
+   },
+   "2_side_light_off.103": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.0768735408782955,
+            "y": 0.6453283702936621,
+            "z": 0.38380083892304384
+         },
+         "pixel_2d": {
+            "x": 217,
+            "y": 352,
+            "depth": 2.0691678524017334
+         }
+      }
+   },
+   "2_side_light_off.104": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.052566289901734,
+            "y": -0.6428491199412876,
+            "z": 0.38361577258741875
+         },
+         "pixel_2d": {
+            "x": 310,
+            "y": 353,
+            "depth": 2.044860601425171
+         }
+      }
+   },
+   "2_side_light_off.105": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.1150968074798584,
+            "y": -0.9405480945503752,
+            "z": 0.38391263815546495
+         },
+         "pixel_2d": {
+            "x": 306,
+            "y": 320,
+            "depth": 3.107391119003296
+         }
+      }
+   },
+   "2_side_light_on.101": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.181411266326904,
+            "y": -0.3175622249034409,
+            "z": 0.38433743064708636
+         },
+         "pixel_2d": {
+            "x": 271,
+            "y": 304,
+            "depth": 4.173705577850342
+         }
+      }
+   },
+   "2_side_light_on.102": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.278426885604859,
+            "y": 0.48938351627316434,
+            "z": 0.38416139205403255
+         },
+         "pixel_2d": {
+            "x": 239,
+            "y": 317,
+            "depth": 3.270721197128296
+         }
+      }
+   },
+   "2_side_light_on.103": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.076873540878296,
+            "y": 0.64532831068873,
+            "z": 0.3838007937648342
+         },
+         "pixel_2d": {
+            "x": 217,
+            "y": 352,
+            "depth": 2.0691678524017334
+         }
+      }
+   },
+   "2_side_light_on.104": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.052566289901734,
+            "y": -0.6428490603366428,
+            "z": 0.38361582519620896
+         },
+         "pixel_2d": {
+            "x": 310,
+            "y": 353,
+            "depth": 2.044860601425171
+         }
+      }
+   },
+   "2_side_light_on.105": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.1150968074798584,
+            "y": -0.9405480349457305,
+            "z": 0.38391266795778733
+         },
+         "pixel_2d": {
+            "x": 306,
+            "y": 320,
+            "depth": 3.107391119003296
+         }
+      }
+   },
+   "509c2484-6cb9-45fc-a307-8bce815fef51.002": {
+      "semantic_name": "mailbox_home",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.442764274775982,
+            "y": -0.22335945069789886,
+            "z": 0.7426346853137247
+         },
+         "pixel_2d": {
+            "x": 267,
+            "y": 289,
+            "depth": 4.43505859375
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.414": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.471425011704613,
+            "y": 0.7758466748165196,
+            "z": 0.17353628689339545
+         },
+         "pixel_2d": {
+            "x": 234,
+            "y": 307,
+            "depth": 4.463719367980957
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.415": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.117345765529576,
+            "y": 0.9720632596211995,
+            "z": 0.17330719061993366
+         },
+         "pixel_2d": {
+            "x": 225,
+            "y": 312,
+            "depth": 4.109640121459961
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.416": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.8207141904540345,
+            "y": 0.13213944368574193,
+            "z": 0.1732408565382325
+         },
+         "pixel_2d": {
+            "x": 255,
+            "y": 316,
+            "depth": 3.8130085468292236
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.417": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.375798419068505,
+            "y": 0.6632215527462071,
+            "z": 0.1728546183734217
+         },
+         "pixel_2d": {
+            "x": 221,
+            "y": 353,
+            "depth": 2.3680927753448486
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.418": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.604863360474755,
+            "y": -1.505860910041421,
+            "z": 0.17294693851759818
+         },
+         "pixel_2d": {
+            "x": 322,
+            "y": 320,
+            "depth": 3.5971577167510986
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.419": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.471379235485694,
+            "y": -2.9021468009088647,
+            "z": 0.17303034580473609
+         },
+         "pixel_2d": {
+            "x": 356,
+            "y": 308,
+            "depth": 4.4636735916137695
+         }
+      }
+   },
+   "Hedge_Carpinus-betulus_K_summer.420": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.5006761103868484,
+            "y": -4.565598711371422,
+            "z": 0.17281080333824317
+         },
+         "pixel_2d": {
+            "x": 410,
+            "y": 307,
+            "depth": 4.4929704666137695
+         }
+      }
+   },
+   "Plant_Pothos_A_spring-summer-autumn.414": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.474218904972076,
+            "y": -0.3197939544916153,
+            "z": 0.1816499581327662
+         },
+         "pixel_2d": {
+            "x": 270,
+            "y": 307,
+            "depth": 4.466513156890869
+         }
+      }
+   },
+   "Plant_Pothos_A_spring-summer-autumn.415": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.178686678848756,
+            "y": -0.26426721825922606,
+            "z": 0.18156367760301886
+         },
+         "pixel_2d": {
+            "x": 269,
+            "y": 311,
+            "depth": 4.170980930328369
+         }
+      }
+   },
+   "Plant_Pothos_A_spring-summer-autumn.416": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.9154728055000305,
+            "y": 0.6550594717264175,
+            "z": 0.1812885565450415
+         },
+         "pixel_2d": {
+            "x": 228,
+            "y": 335,
+            "depth": 2.9077670574188232
+         }
+      }
+   },
+   "Plant_Pothos_A_spring-summer-autumn.417": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.2396000027656555,
+            "y": -1.0532685965299606,
+            "z": 0.1811565844109282
+         },
+         "pixel_2d": {
+            "x": 309,
+            "y": 327,
+            "depth": 3.2318942546844482
+         }
+      }
+   },
+   "Plant_Pothos_A_spring-summer-autumn.418": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.33196121366403,
+            "y": -2.328521778887012,
+            "z": 0.1813283482582989
+         },
+         "pixel_2d": {
+            "x": 339,
+            "y": 309,
+            "depth": 4.324255466461182
+         }
+      }
+   },
+   "Plant_Pothos_A_spring-summer-autumn.419": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.474234163761139,
+            "y": -3.9978025406599045,
+            "z": 0.18114400038029999
+         },
+         "pixel_2d": {
+            "x": 392,
+            "y": 307,
+            "depth": 4.466528415679932
+         }
+      }
+   },
+   "Shrub_Carpinus-betulus_A_summer.415": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.4773284933812985,
+            "y": 0.22824448182249135,
+            "z": 0.12946485886620485
+         },
+         "pixel_2d": {
+            "x": 252,
+            "y": 309,
+            "depth": 4.469622611999512
+         }
+      }
+   },
+   "Shrub_Carpinus-betulus_A_summer.416": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.579654410481453,
+            "y": -0.5523567050695419,
+            "z": 0.12934616953134537
+         },
+         "pixel_2d": {
+            "x": 277,
+            "y": 308,
+            "depth": 4.571948528289795
+         }
+      }
+   },
+   "Shrub_Carpinus-betulus_A_summer.417": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.40091271779462,
+            "y": 0.46422164306974345,
+            "z": 0.12915517976237334
+         },
+         "pixel_2d": {
+            "x": 240,
+            "y": 326,
+            "depth": 3.39320707321167
+         }
+      }
+   },
+   "Shrub_Carpinus-betulus_A_summer.418": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.7580751925706863,
+            "y": -0.7263452857732773,
+            "z": 0.12878703698515892
+         },
+         "pixel_2d": {
+            "x": 301,
+            "y": 342,
+            "depth": 2.7503695487976074
+         }
+      }
+   },
+   "Shrub_Carpinus-betulus_A_summer.419": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 3.9702333944808794,
+            "y": -1.9225732559850206,
+            "z": 0.1290077777154297
+         },
+         "pixel_2d": {
+            "x": 332,
+            "y": 316,
+            "depth": 3.9625277519226074
+         }
+      }
+   },
+   "Shrub_Carpinus-betulus_A_summer.420": {
+      "semantic_name": null,
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.477328493786234,
+            "y": -3.449901626338243,
+            "z": 0.1289588816943119
+         },
+         "pixel_2d": {
+            "x": 374,
+            "y": 309,
+            "depth": 4.469622611999512
+         }
+      }
+   },
+   "body_001": {
+      "semantic_name": "body",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.021406412124634,
+            "y": 0.03820125758647919,
+            "z": 0.8976592663675547
+         },
+         "pixel_2d": {
+            "x": 261,
+            "y": 317,
+            "depth": 2.0137007236480713
+         }
+      }
+   },
+   "curve_top": {
+      "semantic_name": "mailbox_home",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 2.9778119921684265,
+            "y": 0.0408707894384861,
+            "z": -0.002867370843887329
+         },
+         "pixel_2d": {
+            "x": 259,
+            "y": 342,
+            "depth": 2.970106363296509
+         }
+      }
+   },
+   "five_door_jeep.002": {
+      "semantic_name": "five_door_jeep",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 9.67052729551175,
+            "y": 5.4238572395287505,
+            "z": 0.974779690050548
+         },
+         "pixel_2d": {
+            "x": 175,
+            "y": 268,
+            "depth": 9.662821769714355
+         }
+      }
+   },
+   "shopping_bag_no_handles_tall.001": {
+      "semantic_name": "parcel_bags",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 1.930899977684021,
+            "y": -0.2118460088968277,
+            "z": 1.065136656165123
+         },
+         "pixel_2d": {
+            "x": 280,
+            "y": 307,
+            "depth": 1.9231942892074585
+         }
+      }
+   },
+   "top_lid.007": {
+      "semantic_name": "mailbox_home",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 1.6608144415904835,
+            "y": -0.8891397315855365,
+            "z": 1.6257017751401204
+         },
+         "pixel_2d": {
+            "x": 345,
+            "y": 265,
+            "depth": 1.6531087160110474
+         }
+      }
+   },
+   "wheeled_bin.027": {
+      "semantic_name": "trash_bin",
+      "center_of_mass": {
+         "global_3d": {
+            "x": 4.399047374725342,
+            "y": 4.210217121411134,
+            "z": 0.5787509223488185
+         },
+         "pixel_2d": {
+            "x": 118,
+            "y": 295,
+            "depth": 4.391341686248779
+         }
+      }
+   }
+}
