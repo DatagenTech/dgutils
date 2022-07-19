@@ -7,7 +7,11 @@
    "accessories": [],
    "facial_hair_included": false,
    "identity_id": "5f4e20e1-de36-4c04-9778-df95b13fa401",
-   "identity_label": {},
+   "identity_label": {
+      "age": "adult",
+      "ethnicity": "southeast_asian",
+      "gender": "male"
+   },
    "head_metadata": {
       "head_root_location": {
          "x": 0.0,
