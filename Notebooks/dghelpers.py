@@ -154,7 +154,6 @@ def draw_keypoints(img, node, thickness, cmap_idx=0):
 		draw_keypoints(img, child, thickness, cmap_idx)
 
 
-
 def hic_visualize_pose(datapoint_path, skeleton=True):
 	RGB_IMG_PATH = join(datapoint_path, 'visible_spectrum.png')
 	body, mouth, upper_face, left_hand, right_hand = get_kinematic_tree(datapoint_path)
@@ -191,3 +190,43 @@ def set_axes_equal(ax: plt.Axes):
     origin = np.mean(limits, axis=1)
     radius = 0.5 * np.max(np.abs(limits[:, 1] - limits[:, 0]))
     set_axes_radius(ax, origin, radius)
+
+
+def all_body_keypoints_2d(data_point):
+	all_keypoints = np.vstack((data_point.keypoints.face.standard.coords_2d,
+                          data_point.keypoints.body.shoulder.left.coords_2d,
+                          data_point.keypoints.body.shoulder.right.coords_2d,
+                          data_point.keypoints.body.elbow.left.coords_2d,
+                          data_point.keypoints.body.elbow.right.coords_2d,
+                          data_point.keypoints.body.wrist.left.coords_2d,
+                          data_point.keypoints.body.wrist.right.coords_2d,
+                          data_point.keypoints.hand.left.finger.index.tip.coords_2d,
+                          data_point.keypoints.hand.right.finger.index.tip.coords_2d,
+                          data_point.keypoints.body.hip.left.coords_2d,
+                          data_point.keypoints.body.hip.right.coords_2d,
+                          data_point.keypoints.feet.right.heel.coords_2d,
+                          data_point.keypoints.feet.left.heel.coords_2d,
+                          data_point.keypoints.feet.right.pinky.coords_2d,
+                          data_point.keypoints.feet.left.pinky.coords_2d,
+                          ))
+	return all_keypoints
+
+
+def all_body_keypoints_3d(data_point):
+	all_keypoints = np.vstack((data_point.keypoints.face.standard.coords_3d,
+                          data_point.keypoints.body.shoulder.left.coords_3d,
+                          data_point.keypoints.body.shoulder.right.coords_3d,
+                          data_point.keypoints.body.elbow.left.coords_3d,
+                          data_point.keypoints.body.elbow.right.coords_3d,
+                          data_point.keypoints.body.wrist.left.coords_3d,
+                          data_point.keypoints.body.wrist.right.coords_3d,
+                          data_point.keypoints.hand.left.finger.index.tip.coords_3d,
+                          data_point.keypoints.hand.right.finger.index.tip.coords_3d,
+                          data_point.keypoints.body.hip.left.coords_3d,
+                          data_point.keypoints.body.hip.right.coords_3d,
+                          data_point.keypoints.feet.right.heel.coords_3d,
+                          data_point.keypoints.feet.left.heel.coords_3d,
+                          data_point.keypoints.feet.right.pinky.coords_3d,
+                          data_point.keypoints.feet.left.pinky.coords_3d,
+                          ))
+	return all_keypoints

@@ -4,3 +4,10 @@ ID_grouping_dataset
 __pycache__
 Notebooks/run_all_notebooks.py
 Notebooks/id_grouping.py
+.idea/dgutils_stage.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
+resources/hic_in_cabin.avi
+.idea/.gitignore
