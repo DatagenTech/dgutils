@@ -1,6 +1,7 @@
 <div align="center">
-  <img src="docs/assets/datagen-logo" width="600"/>
+  <img src="docs/assets/datagen-logo.png" width="600"/>
  <br/><br/>
+</div>
   
 
 # **Simulate the exact data your AI needs.**
