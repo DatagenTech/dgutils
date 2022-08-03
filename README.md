@@ -60,7 +60,7 @@ pip install datagen-tech
 
 ## Documentation
 
-Check out Datagen [Docs](https://datagen-tech-knowledgebase.readthedocs-hosted.com/en/latest/) for full documentation, user guides, playbooks and examples.
+Check out Datagen [Docs](https://docs.datagen.tech/en/latest/) for full documentation, user guides, playbooks and examples.
 
 # Reach out
 
