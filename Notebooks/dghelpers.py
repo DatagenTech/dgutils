@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 from matplotlib.patches import Patch
+from mpl_toolkits.axes_grid1 import ImageGrid
 import numpy as np
 from os.path import join
 import json
