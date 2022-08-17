@@ -71,81 +71,64 @@ def show_keypoints(img, keypoints, visible, title, convention='ij'):
 
 
 ############################################## HIC functions ##############################################
-def filter_2d(d):
-	if 'pixel_2d' in d.keys():
-		return np.array([d['pixel_2d']['x'], d['pixel_2d']['y']])
-	else:
-		new_d = {}
-		for key, value in d.items():
-			new_d[key] = filter_2d(value)
-		return new_d
-
 class Node:
-	def __init__(self, data, children=None):
-		self.data = data
-		if children is not None:
-			self.children = children
-		else:
-			self.children = []
+    def __init__(self, data, children=None):
+        if hasattr(data, 'coords_2d'):
+            data = data.coords_2d
+        self.data = data
+        if children is not None:
+            self.children = children
+        else:
+            self.children = []
 
-def get_kinematic_tree(datapoint_path):
-	BODY_KPTS_PATH = join(datapoint_path, 'key_points', 'body_key_points.json')
-	HANDS_KPTS_PATH = join(datapoint_path, 'key_points', 'hands_key_points.json')
-
-	with open(BODY_KPTS_PATH) as f:
-		body_dict = json.load(f)['body']
-
-	with open(HANDS_KPTS_PATH) as f:
-		hands_dict = json.load(f)['hands']
-
-	body_dict = filter_2d(body_dict)
-	hands_dict = filter_2d(hands_dict)
+def get_kinematic_tree(dp):
+	print(dp)
+	hands = dp.keypoints.hand
+	body = dp.keypoints.body
 
 	for side in ('left', 'right'):
-		get_finger_tree = lambda finger: Node(finger['mcp'],
-											  [Node(finger['pip'], [Node(finger['dip'], [Node(finger['tip'])])])])
+	    get_finger_tree = lambda finger : Node(finger.mcp, [Node(finger.pip, [Node(finger.dip, [Node(finger.tip)])])])
+	    
+	    # We begin with building the kinematic tree of each of the fingers separately
+	    fingers = getattr(hands, side).finger
+	    thumb = fingers.thumb
+	    thumb_tree = Node(thumb.cmc, [Node(thumb.mcp, [Node(thumb.ip, [Node(thumb.tip)])])])
+	    index_tree = get_finger_tree(fingers.index)
+	    middle_tree = get_finger_tree(fingers.middle)
+	    ring_tree = get_finger_tree(fingers.ring)
+	    pinky_tree = get_finger_tree(fingers.pinky)
 
-		# We begin with building the kinematic tree of each of the fingers separately
-		fingers_dict = hands_dict[side]['finger']
-		thumb_dict = fingers_dict['thumb']
-		thumb = Node(thumb_dict['cmc'], [Node(thumb_dict['mcp'], [Node(thumb_dict['ip'], [Node(thumb_dict['tip'])])])])
-		index = get_finger_tree(fingers_dict['index'])
-		middle = get_finger_tree(fingers_dict['middle'])
-		ring = get_finger_tree(fingers_dict['ring'])
-		pinky = get_finger_tree(fingers_dict['pinky'])
+	    # We can build the hand tree from all of the fingers
+	    hand_tree = Node(getattr(hands, side).wrist, [thumb_tree, index_tree, middle_tree, ring_tree, pinky_tree])
 
-		# We can build the hand tree from all of the fingers
-		hand = Node(hands_dict[side]['wrist'], [thumb, index, middle, ring, pinky])
+	    # We do the same with arms, legs and eyes
+	    arm_tree = Node(getattr(body.shoulder, side), [Node(getattr(body.elbow, side), [Node(getattr(body.wrist, side))])])
+	    leg_tree = Node(getattr(body.hip, side), [Node(getattr(body.knee, side), [Node(getattr(body.ankle, side), [Node(getattr(body.foot, side).index)])])])
 
-		# We do the same with arms, legs and eyes
-		arm = Node(body_dict['shoulder'][side], [Node(body_dict['elbow'][side], [Node(body_dict['wrist'][side])])])
-		leg = Node(body_dict['hip'][side], [
-			Node(body_dict['knee'][side], [Node(body_dict['ankle'][side], [Node(body_dict['foot'][side]['index'])])])])
+	    eye = getattr(body.eye, side)
+	    eye_tree = Node(eye.center, [Node(eye.outer), Node(eye.inner), Node(getattr(body.ear, side))])
 
-		eye_dict = body_dict['eye'][side]
-		eye = Node(eye_dict['center'], [Node(eye_dict['outer']), Node(eye_dict['inner']), Node(body_dict['ear'][side])])
-
-		if side == 'left':
-			left_hand = hand
-			left_arm = arm
-			left_leg = leg
-			left_eye = eye
-		elif side == 'right':
-			right_hand = hand
-			right_arm = arm
-			right_leg = leg
-			right_eye = eye
+	    if side == 'left':
+	        left_hand_tree = hand_tree
+	        left_arm_tree = arm_tree
+	        left_leg_tree = leg_tree
+	        left_eye_tree = eye_tree
+	    elif side == 'right':
+	        right_hand_tree = hand_tree
+	        right_arm_tree = arm_tree
+	        right_leg_tree = leg_tree
+	        right_eye_tree = eye_tree
 
 	# We create two new nodes at the center of the shoulders and the hips
-	hips_center_position = np.mean([left_leg.data, right_leg.data], axis=0).astype('int')
-	shoulders_center_position = np.mean([left_arm.data, right_arm.data], axis=0).astype('int')
+	hips_center_position = np.mean([left_leg_tree.data, right_leg_tree.data], axis=0).astype('int')
+	shoulders_center_position = np.mean([left_arm_tree.data, right_arm_tree.data], axis=0).astype('int')
 
 	# We can finally create the whole body and face trees
-	lower_body = Node(hips_center_position, [left_leg, right_leg])
-	body = Node(shoulders_center_position, [lower_body, left_arm, right_arm])
-	mouth = Node(body_dict['mouth']['left'], [Node(body_dict['mouth']['right'])])
-	upper_face = Node(body_dict['nose'], [left_eye, right_eye])
-	return body, mouth, upper_face, left_hand, right_hand
+	lower_body_tree = Node(hips_center_position, [left_leg_tree, right_leg_tree])
+	mouth_tree = Node(body.mouth.left, [Node(body.mouth.right)])
+	upper_face_tree = Node(body.nose, [left_eye_tree, right_eye_tree])
+	body_tree = Node(shoulders_center_position, [lower_body_tree, left_arm_tree, right_arm_tree])
+	return body_tree, mouth_tree, upper_face_tree, left_hand_tree, right_hand_tree
 
 
 nrof_colors = 30
@@ -166,11 +149,10 @@ def draw_keypoints(img, node, thickness, cmap_idx=0):
 		draw_keypoints(img, child, thickness, cmap_idx)
 
 
-def hic_visualize_pose(datapoint_path, skeleton=True):
-	RGB_IMG_PATH = join(datapoint_path, 'visible_spectrum.png')
-	body, mouth, upper_face, left_hand, right_hand = get_kinematic_tree(datapoint_path)
+def hic_visualize_pose(dp, skeleton=True):
+	body, mouth, upper_face, left_hand, right_hand = get_kinematic_tree(dp)
 
-	img = cv2.imread(RGB_IMG_PATH)
+	img = dp.visible_spectrum.copy()
 
 	if skeleton:
 		drawing_func = draw_skeleton
@@ -183,7 +165,7 @@ def hic_visualize_pose(datapoint_path, skeleton=True):
 	drawing_func(img, left_hand, 2, cmap_idx=3 * nrof_colors // 5)
 	drawing_func(img, right_hand, 2, cmap_idx=4 * nrof_colors // 5)
 
-	return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+	return img
 
 
 def set_axes_radius(ax, origin, radius):
