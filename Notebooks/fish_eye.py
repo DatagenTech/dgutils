@@ -248,7 +248,7 @@ if __name__ == '__main__':
                     coords = nested_lookup(key="pixel_2d", document=json_kpts)
                     all_dist_kpts = [[coord[0], coord[1]] for coord in coords]
                     output_dist_image = draw_keypoints(dist_image, all_dist_kpts)
-                    output_dist_image = cv2.resize(output_dist_image, VIDEO_FRAME_SIZE, interpolation=cv2.INTER_LINEAR)
+                    output_dist_image = cv2.resize(output_dist_image, VIDEO_FRAME_SIZE, interpolation=cv2.INTER_LANCZOS4)
                 video.write(output_dist_image)
 
         if args.visualize:
