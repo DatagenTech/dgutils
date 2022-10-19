@@ -3,13 +3,11 @@ import cv2
 import numpy as np
 import datagen as dg
 
-import matplotlib
-matplotlib.use('TkAgg')
-from dgutils.Notebooks.dghelpers import imshow
-import matplotlib.pyplot as plt
 
-DATASET_PATH = '/Users/gilsheinbaum/Documents/datasets/Sep22/customers/customers_api_samples/claire_labs_head_yaw'
-dp = dg.load(DATASET_PATH)[46]
+# Define the dataset's path and the data-point that you're willing to check
+DATASET_PATH = '...'
+dp = dg.load(DATASET_PATH)[0]
+
 
 def get_perc_vis_face(dp):
     face_dense_kpts_2d = dp.keypoints.face.dense.coords_2d
@@ -72,14 +70,11 @@ def get_perc_vis_face(dp):
     cv2.drawContours(image=face_mask, contours=contours, contourIdx=-1, color=(255, 255, 255), thickness=cv2.FILLED,
                      lineType=cv2.LINE_AA)
 
-    imshow(face_mask)
-    plt.show()
-
     human_segment = cv2.bitwise_and(face_mask, face_mask, mask=seg_mask)
     perc_vis_face = (np.sum(human_segment)/np.sum(face_mask))*100
-    imshow(human_segment)
-    plt.show()
+
     return perc_vis_face
 
 
-print(get_perc_vis_face(dp))
+if __name__ == '__main__':
+    vis_face_perc = get_perc_vis_face(dp)
