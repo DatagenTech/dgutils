@@ -58,9 +58,9 @@ def lookup_callback(point_dict, distorted_map, orig_im_map, x_red, y_red, ratio_
     point = np.array([point_dict["x"], point_dict["y"]])
     new_kpt_coord = np.array([0, 0])
     try:
-        new_point = distorted_map[orig_im_map[point[1]][point[0]][1]][orig_im_map[point[1]][point[0]][0]]
-        new_kpt_coord[0] = round((new_point[0] - y_red) * ratio_y)
-        new_kpt_coord[1] = round((new_point[1] - x_red) * ratio_x)
+        new_point = distorted_map[orig_im_map[round(point[1])][round(point[0])][1]][orig_im_map[round(point[1])][round(point[0])][0]]
+        new_kpt_coord[0] = round((new_point[0] - x_red) * ratio_x)
+        new_kpt_coord[1] = round((new_point[1] - y_red) * ratio_y)
         new_kpt_coord = new_kpt_coord.astype(int)
     except:
         # If a keypoint is not visible
@@ -91,18 +91,26 @@ def create_distorted_jsons(dp_cam_path, dis_pixel_map, orig_pixel_map, x_crop, y
 
 def apply_fisheye(data_point, distortion_coefficients, crop, upscale, visualize):
     # Load the images and camera's intrinsic matrix
-    visible_spectrum_image = cv2.cvtColor(data_point.visible_spectrum, cv2.COLOR_RGB2BGR)
+    try:
+        visible_spectrum_image = cv2.cvtColor(data_point.visible_spectrum, cv2.COLOR_RGB2BGR)
+    except:
+        visible_spectrum_image = None
+    try:
+        nir_image = cv2.cvtColor(data_point.infrared_spectrum, cv2.COLOR_RGB2BGR)
+    except:
+        nir_image = None
     semantic_segmentation_image = cv2.cvtColor(data_point.semantic_segmentation, cv2.COLOR_RGB2BGR)
     depth_image = cv2.cvtColor(data_point.depth, cv2.COLOR_RGB2BGR)
     normal_maps_image = cv2.cvtColor(data_point.normal_maps, cv2.COLOR_RGB2BGR)
     camera_intrinsic = data_point.camera_metadata.intrinsic_matrix
     images = {
         "visible_spectrum": visible_spectrum_image,
+        "ir_spectrum": nir_image,
         "semantic_segmentation": semantic_segmentation_image,
         "depth": depth_image,
         "normal_maps": normal_maps_image,
     }
-    h, w, _ = visible_spectrum_image.shape  # Assumes that all the images have the same size
+    h, w, _ = semantic_segmentation_image.shape  # Assumes that all the images have the same size
     if len(distortion_coefficients) == 4:
         distortion_coefficients = np.array(distortion_coefficients)
     else:
@@ -117,64 +125,68 @@ def apply_fisheye(data_point, distortion_coefficients, crop, upscale, visualize)
     undistorted_map, distorted_map = create_pixels_maps(image_pixels, w, h, camera_intrinsic, distortion_coefficients)
 
     for image_name, image in images.items():
-        h, w, ch = image.shape
+        if image is not None:
+            h, w, ch = image.shape
 
-        # visible_spectrum image --> Lanczos interpolation
-        if image_name == "visible_spectrum":
-            interpolation_method = cv2.INTER_LANCZOS4
-        # Segmentation mask/depth map/normals map --> nearest neighbor interpolation
-        else:
-            interpolation_method = cv2.INTER_NEAREST
-
-        # Create a distorted image
-        distorted_image = np.dstack(
-            [
-                cv2.remap(
-                    image[:, :, channel],
-                    undistorted_map[:, :, 1].astype(np.float32),
-                    undistorted_map[:, :, 0].astype(np.float32),
-                    interpolation=interpolation_method,
-                    borderMode=cv2.BORDER_CONSTANT,
-                    borderValue=0,
-                )
-                for channel in range(ch)
-            ]
-        )
-
-        if crop:
-            # Crop the distorted image
-            min_x = np.ceil(distorted_map[int(h / 2), 0, 0]).astype(np.int32)
-            max_x = np.ceil(distorted_map[int(h / 2), -1, 0]).astype(np.int32)
-            min_y = np.ceil(distorted_map[0, int(w / 2), 1]).astype(np.int32)
-            max_y = np.ceil(distorted_map[-1, int(w / 2), 1]).astype(np.int32)
-            distorted_image = distorted_image[min_y:max_y, min_x:max_x]
-
-            if upscale:
-                # Upscale the cropped image to its original size
-                cropped_im_h, cropped_im_w, _ = distorted_image.shape
-                ratio_x = h / cropped_im_h
-                ratio_y = w / cropped_im_w
-                distorted_image = cv2.resize(distorted_image, (w, h), interpolation=interpolation_method)
+            # visible_spectrum image --> Lanczos interpolation
+            if image_name == "visible_spectrum" or image_name == "ir_spectrum":
+                interpolation_method = cv2.INTER_LANCZOS4
+            # Segmentation mask/depth map/normals map --> nearest neighbor interpolation
             else:
-                ratio_x = ratio_y = 1
-        else:
-            min_x = min_y = 0
-            ratio_x = ratio_y = 1
-        # Save the images
-        if image_name == "visible_spectrum" or image_name == "semantic_segmentation":
-            cv2.imwrite(
-                os.path.join(data_point.camera_path, image_name) + "_fisheye.png",
-                distorted_image,
-            )
-        elif image_name == "normal_maps" or image_name == "depth":
-            cv2.imwrite(
-                os.path.join(data_point.camera_path, image_name) + "_fisheye.exr",
-                distorted_image,
-                [cv2.IMWRITE_EXR_TYPE, cv2.IMWRITE_EXR_TYPE_HALF],
+                interpolation_method = cv2.INTER_NEAREST
+
+            # Create a distorted image
+            distorted_image = np.dstack(
+                [
+                    cv2.remap(
+                        image[:, :, channel],
+                        undistorted_map[:, :, 1].astype(np.float32),
+                        undistorted_map[:, :, 0].astype(np.float32),
+                        interpolation=interpolation_method,
+                        borderMode=cv2.BORDER_CONSTANT,
+                        borderValue=0,
+                    )
+                    for channel in range(ch)
+                ]
             )
 
-        if image_name == "visible_spectrum":
-            rgb_dist = distorted_image
+            if crop:
+                # Crop the distorted image
+                min_x = np.ceil(distorted_map[int(w / 2), 0, 0]).astype(np.int32)
+                max_x = np.ceil(distorted_map[int(w / 2), -1, 0]).astype(np.int32)
+                min_y = np.ceil(distorted_map[0, int(h / 2), 1]).astype(np.int32)
+                max_y = np.ceil(distorted_map[-1, int(h / 2), 1]).astype(np.int32)
+                distorted_image = distorted_image[min_y:max_y, min_x:max_x]
+
+                if upscale:
+                    # Upscale the cropped image to its original size
+                    cropped_im_h, cropped_im_w, _ = distorted_image.shape
+                    ratio_x = h / cropped_im_h
+                    ratio_y = w / cropped_im_w
+                    distorted_image = cv2.resize(distorted_image, (w, h), interpolation=interpolation_method)
+                else:
+                    ratio_x = ratio_y = 1
+            else:
+                min_x = min_y = 0
+                ratio_x = ratio_y = 1
+            # Save the images
+            if image_name == "visible_spectrum" or image_name == "semantic_segmentation" or image_name == "ir_spectrum":
+                cv2.imwrite(
+                    os.path.join(data_point.camera_path, image_name) + "_fisheye.png",
+                    distorted_image,
+                )
+            elif image_name == "normal_maps" or image_name == "depth":
+                cv2.imwrite(
+                    os.path.join(data_point.camera_path, image_name) + "_fisheye.exr",
+                    distorted_image,
+                    [cv2.IMWRITE_EXR_TYPE, cv2.IMWRITE_EXR_TYPE_HALF],
+                )
+            if visible_spectrum_image is not None:
+                if image_name == "visible_spectrum":
+                    rgb_dist = distorted_image
+            elif visible_spectrum_image is None:
+                if image_name == "ir_spectrum":
+                    rgb_dist = distorted_image
 
     all_dist_kpts = create_distorted_jsons(data_point.camera_path,
                                            distorted_map,
@@ -190,7 +202,8 @@ def apply_fisheye(data_point, distortion_coefficients, crop, upscale, visualize)
 
 def draw_keypoints(img, keypoints):
     for kpt in keypoints:
-        cv2.circle(img, (kpt[1], kpt[0]), 0, (0, 0, 255), 3)
+        if kpt[0] is not None and kpt[1] is not None:
+            cv2.circle(img, (round(kpt[1]), round(kpt[0])), 0, (0, 0, 255), 3)
     return img
 
 
@@ -237,7 +250,6 @@ if __name__ == '__main__':
         if args.visualize:
             video = cv2.VideoWriter(os.path.join(scene.path, 'distorted.avi'), cv2.VideoWriter_fourcc(*CODEC), FPS,
                                     VIDEO_FRAME_SIZE)
-
         # Loop over the datapoints (HIC --> frames, Faces --> Cameras)
         for j, dp in enumerate(scene.datapoints):
             # Applies fisheye distortion on all images and key points
@@ -250,7 +262,6 @@ if __name__ == '__main__':
                     output_dist_image = draw_keypoints(dist_image, all_dist_kpts)
                     output_dist_image = cv2.resize(output_dist_image, VIDEO_FRAME_SIZE, interpolation=cv2.INTER_LANCZOS4)
                 video.write(output_dist_image)
-
         if args.visualize:
             video.release()
 
