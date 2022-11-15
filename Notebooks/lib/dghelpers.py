@@ -144,7 +144,6 @@ def draw_skeleton(img, node, thickness, cmap_idx=0):
 		child.data = child.data.astype(int)
 		color = (np.array(cmap(cmap_idx % nrof_colors))[:3]*255).astype('int').tolist()
 		cmap_idx += 1
-		print(np.flip(child.data))
 		cv2.line(img, np.flip(node.data), np.flip(child.data), color=color, thickness=thickness, lineType=cv2.LINE_AA)
 		draw_skeleton(img, child, thickness, cmap_idx+1)
 
@@ -153,8 +152,7 @@ def draw_keypoints(img, node, thickness, cmap_idx=0):
 	node.data[1] = round(node.data[1])
 	node.data = node.data.astype(int)
 	color = (np.array(cmap(cmap_idx % nrof_colors))[:3] * 255).astype('int').tolist()
-	print(np.flip(round(node.data)))
-	cv2.circle(img, np.flip(round(node.data)), thickness, color, -1)
+	cv2.circle(img, np.flip(node.data), thickness, color, -1)
 	for child in node.children:
 		child.data[0] = round(child.data[0])
 		child.data[1] = round(child.data[1])
