@@ -5,6 +5,11 @@ import numpy as np
 from os.path import join
 import json
 import cv2
+from scipy.ndimage import gaussian_filter
+from skimage.measure import EllipseModel
+from scipy.interpolate import splprep, splev
+from matplotlib.path import Path
+
 
 # Show an image
 def imshow(img):
@@ -22,6 +27,121 @@ def plot_grid(fig_shape, input_list, plot_func):
         ax.get_xaxis().set_ticks([])
         ax.get_yaxis().set_ticks([])
         plot_func(ax, input_list[i])
+
+# This function will let us perform the operation while eliminating the potential artifacts at the borders of the mask
+def blend_images(background, foreground, mask, sigma=2):
+    if type(mask) == np.ndarray:
+        mask = gaussian_filter(mask.astype(float), sigma=sigma)
+        if len(mask.shape) == 2:
+            mask = mask[..., None]
+    return (background * (1 - mask) + foreground * mask).astype(np.uint8)
+
+
+
+# This function generates binary masks for pupils, iris, and eyeballs (even with glasses)
+def eyes_masks(dp):
+    # Creates an eyeball mask even when we have glasses
+    def eyeball_mask(dp):
+        right_eye_upper_idx = [33, 246, 161, 160, 159, 158, 157, 173, 133]  # Outside-in (including corners)
+        right_eye_lower_idx = [155, 154, 153, 145, 144, 163, 7]  # Inside-out (excluding corners)
+        left_eye_upper_idx = [362, 398, 384, 385, 386, 387, 388, 466, 263]  # Outside-in (including corners)
+        left_eye_lower_idx = [390, 373, 374, 380, 381, 382]  # Inside-out (excluding corners)
+
+        def mask_from_kpts(kpts):
+            def continuous_kpts(control_pts):
+                # This function interpolates the given keypoints to smoothly populate the spaces between them
+                _, idx = np.unique(control_pts, axis=0, return_index=True)
+                control_pts = control_pts[np.sort(idx)]
+                tck, u = splprep([control_pts[:, 1], control_pts[:, 0]], s=0)
+                unew = np.arange(0, 1.01, 0.01)
+                new_points = splev(unew, tck)
+                return np.vstack(new_points).T
+
+            smooth_kpts = continuous_kpts(np.vstack((kpts, kpts[0])))  # Adding the first keypoint to close the path
+            codes = [Path.MOVETO] + [Path.CURVE4] * (len(smooth_kpts) - 2) + [Path.CLOSEPOLY]
+            p = Path(smooth_kpts, codes)
+
+            h, w = dp.visible_spectrum.shape[:2]
+            xx, yy = np.meshgrid(range(h), range(w))
+            img_pts = np.vstack([xx.ravel(), yy.ravel()]).T
+            mask = p.contains_points(img_pts)
+            mask = mask.reshape(dp.visible_spectrum.shape[:2])
+            return mask
+
+        dense_kpts = dp.keypoints.face.dense.coords_2d
+        left_eye_keypoints = dense_kpts[left_eye_upper_idx + left_eye_lower_idx]
+        right_eye_keypoints = dense_kpts[right_eye_upper_idx + right_eye_lower_idx]
+        height, width, _ = dp.infrared_spectrum.shape
+
+        # Combining original eyeballs segmentation map with calculated keypoints segmaps for the areas behind glasses
+        segmap = dp.semantic_segmentation
+        keypoints_based_mask = mask_from_kpts(left_eye_keypoints) | mask_from_kpts(right_eye_keypoints)
+        glasses_mask = np.all(segmap == dp.semantic_segmentation_metadata.glasses, axis=2)
+        keypoints_based_mask &= glasses_mask
+
+        eye_cmap = dp.semantic_segmentation_metadata.human.head.eye
+        segmentation_based_mask = (segmap == eye_cmap.left.eyeball) | (segmap == eye_cmap.right.eyeball)
+        segmentation_based_mask = np.all(segmentation_based_mask, axis=2)
+        return keypoints_based_mask | segmentation_based_mask
+
+    # Fits an ellipse to the keypoints and returns a binary mask
+    def get_ellipse_mask(ellipse_keypoints, height, width):
+        yy, xx = np.meshgrid(range(height), range(width))
+        ell = EllipseModel()
+        ell.estimate(ellipse_keypoints)
+        if ell.params is None:
+            return np.zeros(xx.shape, dtype=bool)
+        xc, yc, a, b, theta = ell.params
+        theta = np.radians(theta)
+        in_ellipse = ((((xx - xc) * np.sin(theta) + (yy - yc) * np.cos(theta)) / a) ** 2
+                      + (((xx - xc) * np.cos(theta) + (yy - yc) * np.sin(theta)) / b) ** 2) < 1
+        return in_ellipse
+    h, w, _ = dp.infrared_spectrum.shape
+
+    irises_keypoints = dp.actor_metadata.iris_circle.coords_2d[0]
+    pupils_keypoints = dp.actor_metadata.pupil_circle.coords_2d[0]
+
+    right_iris_mask = get_ellipse_mask(irises_keypoints.right_eye, h, w)
+    left_iris_mask = get_ellipse_mask(irises_keypoints.left_eye, h, w)
+    right_pupil_mask = get_ellipse_mask(pupils_keypoints.right_eye, h, w)
+    left_pupil_mask = get_ellipse_mask(pupils_keypoints.left_eye, h, w)
+
+    right_iris_mask[right_pupil_mask] = False
+    left_iris_mask[left_pupil_mask] = False
+
+    eyeballs = eyeball_mask(dp)
+    irises = left_iris_mask | right_iris_mask
+    pupils = left_pupil_mask | right_pupil_mask
+
+    irises &= eyeballs
+    pupils &= eyeballs
+
+    return eyeballs, irises, pupils
+
+
+def reconstruct_3d(dp):
+    h, w, _ = dp.infrared_spectrum.shape
+    yy, xx = np.meshgrid(range(h), range(w), indexing='ij')
+    zz = dp.depth[..., 0]
+    #Since the Z grid comes from the depth map, it is already in camera coordinates. 
+    #The X and Y grids are in image coordinates and have to be transformed to camera coordinates.
+	#We will use the intrinsic matrix and homogeneous coordinates to move from image coordinates to camera coordinates:
+    pixels_position_homogeneous = np.stack([xx * zz, yy * zz, zz], axis=2)
+    pixels_position_homogeneous = pixels_position_homogeneous.reshape(-1, 3).T
+    pixels_position_camera = (np.linalg.inv(dp.camera_metadata.intrinsic_matrix) @ pixels_position_homogeneous).T
+    pixels_position_camera = pixels_position_camera.reshape(h, w, 3)
+    return pixels_position_camera
+
+# Preprocessing and normalization according to https://docs.datagen.tech/en/latest/Modalities/normal.html
+def preprocessed_normals(dp):
+    normal_maps = dp.normal_maps.copy()
+    normal_maps = 2 * normal_maps - 1
+    normal_maps[..., 2] *= -1
+    norm = np.linalg.norm(normal_maps, axis=-1)
+    norm[norm == 0] = 1
+    normal_maps /= norm[..., None]
+    return normal_maps
+
 
 # Convert points from world coordinates (3D) to image coordinates (2D)
 def world_to_img(pts_3d, intrinsic_matrix, extrinsic_matrix):
