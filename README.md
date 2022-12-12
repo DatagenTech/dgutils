@@ -64,7 +64,7 @@ Check out Datagen [Docs](https://docs.datagen.tech/en/latest/) for full document
 
 # Reach out
 
-- Want to generate your own, fully customized dataset? Ping us at [hello@datagen.tech](hello@datagen.tech)
+- Want to generate your own, fully customized dataset? Ping us at: hello@datagen.tech
 - Got some cool ideas? Wanna share some feedback of suggest improvements?
-   - We are happy to chat: [community@datagen.tech](community@datagen.tech)
+   - We are happy to chat: community@datagen.tech
    - Or, feel free to open a  [Github Issue](https://github.com/DatagenTech/dgutils/issues) and we will look into it!
