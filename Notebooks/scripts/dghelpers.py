@@ -135,7 +135,7 @@ def reconstruct_3d(dp):
 def preprocessed_normals(dp):
     normal_maps = dp.normal_maps.copy()
     normal_maps = 2 * normal_maps - 1
-    normal_maps[..., 2] *= -1
+    normal_maps[..., 1:] *= -1
     norm = np.linalg.norm(normal_maps, axis=-1)
     norm[norm == 0] = 1
     normal_maps /= norm[..., None]
