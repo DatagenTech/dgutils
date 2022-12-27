@@ -6,7 +6,6 @@ from os.path import join
 import json
 import cv2
 from scipy.ndimage import gaussian_filter
-from skimage.measure import EllipseModel
 from scipy.interpolate import splprep, splev
 from matplotlib.path import Path
 

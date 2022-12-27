@@ -11,7 +11,7 @@
 
 # About Datagen
 
-Datagen is on a mission to transform how CV teams get their data. Our self-service platform allows users to generate fully annotated, photorealistic, high-variance synthetic data, with a focus on data for human-centric computer vision applications.
+Datagen is on a mission to transform how CV teams get their data. Our self-service platform and API allow users to generate fully annotated, photorealistic, high-variance synthetic data, with a focus on data for human-centric computer vision applications.
 
 Fortune 500 companies rely on Datagen to develop their future products in the worlds of AR/VR/Metaverse, In-cabin Vehicle Safety, Robotics, IoT Security and more.
 
@@ -64,7 +64,7 @@ Check out Datagen [Docs](https://docs.datagen.tech/en/latest/) for full document
 
 # Reach out
 
-- Want to generate your own, fully customized dataset? Ping us at [hello@datagen.tech](hello@datagen.tech)
+- Want to generate your own, fully customized dataset? [Try our platform & API for free](https://datagen.tech/signup/) or ping us at: hello@datagen.tech
 - Got some cool ideas? Wanna share some feedback of suggest improvements?
-   - We are happy to chat: [community@datagen.tech](community@datagen.tech)
+   - We are happy to chat: community@datagen.tech
    - Or, feel free to open a  [Github Issue](https://github.com/DatagenTech/dgutils/issues) and we will look into it!
