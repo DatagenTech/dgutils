@@ -1,0 +1,11 @@
+{
+   "version": "1.0.0",
+   "environments": [
+      {
+         "image_name": "infrared_spectrum.png",
+         "environment": "N/A",
+         "time_of_day": "N/A",
+         "background": "N/A"
+      }
+   ]
+}

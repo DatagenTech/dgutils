@@ -1,5 +1,5 @@
 import numpy as np
-from camera import Intrinsics, FocusInfo, SensorShape, CameraRotation, Extrinsics, Camera
+from scripts.camera import Intrinsics, FocusInfo, SensorShape, CameraRotation, Extrinsics, Camera
 
 
 class CameraJSONParser:

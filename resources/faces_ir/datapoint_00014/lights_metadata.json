@@ -1,0 +1,29 @@
+{
+   "version": "1.0.0",
+   "lights": {
+      "infra_red_lamp_0001": {
+         "beam_angle": 25.00000012650595,
+         "brightness": 10.0,
+         "spectrum": "near_infrared",
+         "location": {
+            "x": 0.0,
+            "y": -0.6000000238418579,
+            "z": 0.11999999731779099
+         },
+         "orientation": {
+            "look_at_vector": {
+               "x": 0.0,
+               "y": 1.0,
+               "z": 1.4901162614933128e-07
+            },
+            "up_vector": {
+               "x": 0.0,
+               "y": -1.4901162614933128e-07,
+               "z": 1.0
+            }
+         },
+         "type": "spot",
+         "falloff": 0.0
+      }
+   }
+}

@@ -1,0 +1,93 @@
+{
+   "version": "1.0.0",
+   "datapoints": [
+      {
+         "human": {
+            "id": "b4b46309-34c6-481f-a420-db9e0eb8c8c9",
+            "head": {
+               "eyes": {
+                  "id": "0916784c-7760-45d1-aef4-bdfb274a8219",
+                  "target_of_gaze": {
+                     "direction": {
+                        "y": -0.9335632010265762,
+                        "z": -0.42069866899424885,
+                        "x": 0.200955687132652
+                     },
+                     "distance": 2.1209193764507033
+                  },
+                  "eyelid_closure": 0.8333701990322759
+               },
+               "location": {
+                  "y": 0.0,
+                  "z": 0.0,
+                  "x": 0.0
+               },
+               "rotation": {
+                  "pitch": 0.0,
+                  "roll": 0.0,
+                  "yaw": 0.0
+               },
+               "expression": {
+                  "intensity": 0.11097102525970416,
+                  "name": "sadness"
+               },
+               "eyebrows": {
+                  "id": "5f97559a-ec17-4436-8be2-6fe74a512cd1",
+                  "color_settings": {
+                     "index_of_refraction": 1.539426958420486,
+                     "melanin": 0.3390821374107098,
+                     "redness": 0.9042139475447003,
+                     "roughness": 0.23632000084218124,
+                     "whiteness": 0.4214126324081088
+                  }
+               },
+               "hair": {
+                  "id": "451761da-b42d-40e3-8212-902a6c366744",
+                  "color_settings": {
+                     "index_of_refraction": 1.539426958420486,
+                     "melanin": 0.3390821374107098,
+                     "redness": 0.9042139475447003,
+                     "roughness": 0.23632000084218124,
+                     "whiteness": 0.4214126324081088
+                  }
+               },
+               "facial_hair": null
+            }
+         },
+         "camera": {
+            "name": "camera",
+            "intrinsic_params": {
+               "projection": "perspective",
+               "resolution_width": 128,
+               "resolution_height": 128,
+               "fov_horizontal": 8.0,
+               "fov_vertical": 8.0,
+               "sensor_width": 15.0,
+               "wavelength": "visible"
+            },
+            "extrinsic_params": {
+               "location": {
+                  "y": -1.6,
+                  "z": 0.12,
+                  "x": 0.0
+               },
+               "rotation": {
+                  "pitch": 0.0,
+                  "roll": 0.0,
+                  "yaw": 0.0
+               }
+            }
+         },
+         "accessories": {
+            "glasses": null,
+            "mask": null
+         },
+         "background": {
+            "id": "f2623759-89cd-49d7-a15a-27d1a44f1ef7",
+            "transparent": false,
+            "rotation": 126.51694568780724
+         },
+         "lights": []
+      }
+   ]
+}

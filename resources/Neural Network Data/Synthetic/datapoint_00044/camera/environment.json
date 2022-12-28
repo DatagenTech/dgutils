@@ -1,0 +1,11 @@
+{
+   "version": "1.0.0",
+   "environments": [
+      {
+         "image_name": "visible_spectrum_01.png",
+         "environment": "outdoor",
+         "time_of_day": "night",
+         "background": "hdri"
+      }
+   ]
+}
