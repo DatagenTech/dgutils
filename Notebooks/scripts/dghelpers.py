@@ -9,7 +9,7 @@ from scipy.ndimage import gaussian_filter
 from skimage.measure import EllipseModel
 from scipy.interpolate import splprep, splev
 from matplotlib.path import Path
-
+import datagen
 
 # Show an image
 def imshow(img):
@@ -76,7 +76,7 @@ def eyes_masks(dp):
         # Combining original eyeballs segmentation map with calculated keypoints segmaps for the areas behind glasses
         segmap = dp.semantic_segmentation
         keypoints_based_mask = mask_from_kpts(left_eye_keypoints) | mask_from_kpts(right_eye_keypoints)
-        glasses_mask = np.all(segmap == dp.semantic_segmentation_metadata.glasses, axis=2)
+        glasses_mask = get_children_masks(segmap, dp.semantic_segmentation_metadata.glasses)
         keypoints_based_mask &= glasses_mask
 
         eye_cmap = dp.semantic_segmentation_metadata.human.head.eye
@@ -173,6 +173,19 @@ def world_to_cam(pts_3d, extrinsic_matrix):
 	pts_camera = pts_3d @ extrinsic_matrix.T
 	return np.squeeze(pts_camera)
 
+# Takes a specific field in the colormap and extracts a list of all its children segments' colors
+def get_children_masks(segmap, cmap_entry):
+    if cmap_entry is None:
+        return np.zeros(segmap.shape[:2], dtype=bool)
+    elif type(cmap_entry) == np.ndarray:
+        return (segmap == cmap_entry).all(axis=-1)
+    elif type(cmap_entry) == datagen.modalities.textual.base.segmentation.ColoredSegment:
+        return (segmap == cmap_entry.color).all(axis=-1)
+
+    seg_mask = np.zeros(segmap.shape[:2], dtype=bool)
+    for sub_segment in cmap_entry.sub_segments:
+        seg_mask |= get_children_masks(segmap, sub_segment)
+    return seg_mask
 
 def show_keypoints(img, keypoints, visible, title, convention='ij'):
 	# Convention can be either 'ij' (pixel coordinates) or 'xy' (cartesian coordinates)
