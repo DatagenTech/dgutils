@@ -5,8 +5,8 @@ import datagen as dg
 
 
 # Define the dataset's path and the data-point that you're willing to check
-DATASET_PATH = '...'
-dp = dg.load(DATASET_PATH)[0]
+DATASET_PATH = '../../resources/faces_2'
+dp = dg.load(DATASET_PATH)[2]
 
 
 def get_perc_vis_face(dp):
@@ -77,4 +77,5 @@ def get_perc_vis_face(dp):
 
 
 if __name__ == '__main__':
-    vis_face_perc = get_perc_vis_face(dp)
+
+    print(f"{get_perc_vis_face(dp):0.1f}% of the face is visible")
