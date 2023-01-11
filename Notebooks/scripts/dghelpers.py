@@ -9,8 +9,7 @@ from scipy.ndimage import gaussian_filter
 from scipy.interpolate import splprep, splev
 from matplotlib.path import Path
 import datagen
-import matplotlib
-matplotlib.use('TkAgg')
+
 
 
 # Show an image
